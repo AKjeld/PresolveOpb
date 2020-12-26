@@ -12,13 +12,13 @@ include_directories(
 )
 
 # Boost
-SET (BOOST_ROOT "/usr/local/Cellar/boost")
-SET (BOOST_INCLUDEDIR "/usr/local/Cellar/boost/include")
-SET (BOOST_LIBRARYDIR "/usr/local/Cellar/boost/lib")
+# SET (BOOST_ROOT "/usr/local/Cellar/boost")
+# SET (BOOST_INCLUDEDIR "/usr/local/Cellar/boost/include")
+# SET (BOOST_LIBRARYDIR "/usr/local/Cellar/boost/lib")
 
-SET (BOOST_MIN_VERSION "1.55.0")
-set (Boost_NO_BOOST_CMAKE ON)
-FIND_PACKAGE(Boost ${BOOST_MIN_VERSION} REQUIRED)
+# SET (BOOST_MIN_VERSION "1.55.0")
+# set (Boost_NO_BOOST_CMAKE ON)
+find_package(boost REQUIRED)
 
 message(STATUS "Setting up BOOST")
 message(STATUS " Includes - ${Boost_INCLUDE_DIRS}")
