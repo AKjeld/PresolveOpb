@@ -12,4 +12,5 @@ _deps
 
 /build
 /papilo
+/test
 .DS_Store
