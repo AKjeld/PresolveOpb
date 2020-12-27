@@ -10,5 +10,5 @@ make
 ## Binary usage
 After compilation use binary as follows.
 ```
-./RoundingSatWithPresolver <file in> <file out>
+./PresolveOpb <file in> <file out>
 ```
