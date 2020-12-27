@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(RoundingSatWithPreprocessor)
+project(PresolveOpb)
 
 set(CMAKE_CXX_STANDARD 14)
 get_property(languages GLOBAL PROPERTY ENABLED_LANGUAGES)
@@ -52,5 +52,5 @@ file(GLOB SOURCES "src/*.cpp")
 
 
 
-add_executable(RoundingSatWithPreprocessor ${SOURCES})
-target_link_libraries(RoundingSatWithPreprocessor ${PAPILO_IMPORTED_TARGETS})
+add_executable(PresolveOpb ${SOURCES})
+target_link_libraries(PresolveOpb ${PAPILO_IMPORTED_TARGETS})
