@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/RoundingSatWithPreprocessor",
-            "args": [],
+            "args": ["${workspaceFolder}/build/test.txt", "${workspaceFolder}/build/test2.txt"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

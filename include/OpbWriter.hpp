@@ -20,8 +20,8 @@ struct OpbWriter
         const papilo::ConstraintMatrix<T>& consmatrix = prob.getConstraintMatrix();
         const papilo::Vec<std::string>& varnames = prob.getVariableNames();
         const papilo::Vec<T>& lhs = consmatrix.getLeftHandSides();
-        const papilo::Vec<T>& rhs = consmatrix.getRightHandSides();
         const papilo::Vec<papilo::RowFlags>& row_flags = prob.getRowFlags();
+        // const papilo::Vec<T>& rhs = consmatrix.getRightHandSides();
         // const papilo::Vec<std::string>& consnames = prob.getConstraintNames();
         // const papilo::Objective<T>& obj = prob.getObjective();
         // const papilo::Vec<papilo::ColFlags>& col_flags = prob.getColFlags();
@@ -44,12 +44,12 @@ struct OpbWriter
                 file << val << " " << varnames[indices[j]] << " ";
             }
 
-            // Write <=, >= or =
-            if      (row_flags[i].test( papilo::RowFlag::kRhsInf)) file << ">= " << (int)lhs[i];
-            else if (row_flags[i].test( papilo::RowFlag::kLhsInf)) file << "<= " << (int)rhs[i];
-            else if (row_flags[i].test( papilo::RowFlag::kEquation)) file << "= " << (int)rhs[i];
-            else throw std::invalid_argument( "Row " + std::to_string(i) + " contains invalid constraint");
-            file << ";" << std::endl;
+            // Write relational operator
+            if (row_flags[i].test( papilo::RowFlag::kRhsInf)) file << ">= ";
+            else file << "= "; 
+            // else if (row_flags[i].test( papilo::RowFlag::kEquation)) file << "= ";
+            // else throw std::invalid_argument( "Row " + std::to_string(i) + " contains invalid constraint");
+            file << (int)lhs[i] << " ;" << std::endl;
         }
         file.close();
 

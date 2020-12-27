@@ -28,14 +28,13 @@ namespace utils {
 
         std::cout << "n vars: " << consmatrix.getNCols() << std::endl;
         std::cout << "m constraints: " << consmatrix.getNRows() << std::endl;
-
-        // std::cout << "Variable Names: " << std::endl;
+        std::cout << "Variable Names: " << std::endl;
         
-        // std::cout << "  ";
-        // for(papilo::String varname : varnames) {
-        //     std::cout << varname << ", ";
-        // }
-        // std::cout << std::endl;
+        std::cout << "  ";
+        for(papilo::String varname : varnames) {
+            std::cout << varname << ", ";
+        }
+        std::cout << std::endl;
 
         const auto cols = *consmatrix.getColumns();
 
