@@ -21,7 +21,7 @@ struct OpbWriter
         const papilo::Vec<std::string>& varnames = prob.getVariableNames();
         const papilo::Vec<T>& lhs = consmatrix.getLeftHandSides();
         const papilo::Vec<papilo::RowFlags>& row_flags = prob.getRowFlags();
-        // const papilo::Vec<T>& rhs = consmatrix.getRightHandSides();
+        const papilo::Vec<T>& rhs = consmatrix.getRightHandSides();
         // const papilo::Vec<std::string>& consnames = prob.getConstraintNames();
         // const papilo::Objective<T>& obj = prob.getObjective();
         // const papilo::Vec<papilo::ColFlags>& col_flags = prob.getColFlags();
@@ -31,25 +31,38 @@ struct OpbWriter
 
         // Write constraints
         for ( int i = 0; i < consmatrix.getNRows(); ++i) {
+            // If constraint is <= flip to >=
+            int signBit = 1;
+            if (row_flags[i].test( papilo::RowFlag::kLhsInf)){
+                signBit = -1;
+            }
+
+            // Get row
             const papilo::SparseVectorView<T> row = consmatrix.getRowCoefficients(i);
             const T* rowVals = row.getValues();
             const int* indices = row.getIndices();
             const auto len = row.getLength();
 
             for ( int j = 0; j < len; ++j) {
-                const int val = int(rowVals[j]);
-                if (val > 0) {
-                    file << "+";
-                }
+                // Puts "<coeff> <varname>"
+                const int val = int(rowVals[j])*signBit;
+                if (val > 0) file << "+";
                 file << val << " " << varnames[indices[j]] << " ";
             }
 
-            // Write relational operator
-            if (row_flags[i].test( papilo::RowFlag::kRhsInf)) file << ">= ";
-            else file << "= "; 
+            // Write relational operator. Since all coeffs are flipped if constraint is <=, always puts '>=' if not '='.
+            if (!row_flags[i].test( papilo::RowFlag::kRhsInf) && !row_flags[i].test(papilo::RowFlag::kLhsInf)) {
+                file << "= "; 
+            }
+            else if (row_flags[i].test(papilo::RowFlag::kRhsInf) || row_flags[i].test(papilo::RowFlag::kLhsInf)) {
+                file << ">= ";
+            }
+            else {
+                throw std::invalid_argument( "Row " + std::to_string(i) + " contains invalid constraint. LhsInf: " + std::to_string(row_flags[i].test( papilo::RowFlag::kLhsInf))
+                                                                                                     + " RhsInf: " + std::to_string(row_flags[i].test( papilo::RowFlag::kRhsInf)));
+            } 
             // else if (row_flags[i].test( papilo::RowFlag::kEquation)) file << "= ";
-            // else throw std::invalid_argument( "Row " + std::to_string(i) + " contains invalid constraint");
-            file << (int)lhs[i] << " ;" << std::endl;
+            file << (((int)lhs[i])*signBit) << " ;" << std::endl;
         }
         file.close();
 
