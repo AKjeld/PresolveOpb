@@ -1,7 +1,7 @@
 #include <fstream>
 #include <stdio.h>
 
-namespace RoundingSatPresolver 
+namespace PresolveOpb 
 {
 
 template <typename T>

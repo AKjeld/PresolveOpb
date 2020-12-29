@@ -16,11 +16,11 @@ int main(int argc, char *argv[]){
    std::cout << "Filename in given: " << filenamein << " Filename out given: " << filenameout << std::endl;
    papilo::ProblemBuilder<double> testBuilder;
 
-   testBuilder = RoundingSatPresolver::OpbParser<double>::parseProbOpb(filenamein);
+   testBuilder = PresolveOpb::OpbParser<double>::parseProbOpb(filenamein);
 
    auto testProblem = testBuilder.build();
 
-   // RoundingSatPresolver::OpbWriter<double>::writeProbOpb(testProblem, "test.txt");
+   // PresolveOpb::OpbWriter<double>::writeProbOpb(testProblem, "test.txt");
 
    // utils::print_problem(testProblem);
 
@@ -51,7 +51,7 @@ int main(int argc, char *argv[]){
    }
 
    for(papilo::String name : testProblem.getVariableNames()) {
-      if(name[0] != 'x') throw std::invalid_argument("Improper naming of var " + name);
+      if(name[0] != 'x') throw std::invalid_argument("Incorrect naming of var " + name);
    }
 
    // auto consmatrix = testProblem.getConstraintMatrix();
@@ -62,7 +62,7 @@ int main(int argc, char *argv[]){
    // }
 
    //Write problem to file out
-   RoundingSatPresolver::OpbWriter<double>::writeProbOpb(testProblem, filenameout);
+   PresolveOpb::OpbWriter<double>::writeProbOpb(testProblem, filenameout);
 
    std::cout << "Status code of test problem: " << utils::as_integer(result.status) << std::endl;
    return 0;

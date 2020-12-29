@@ -5,7 +5,7 @@
 #include <papilo/core/ProblemBuilder.hpp>
 
 
-namespace RoundingSatPresolver
+namespace PresolveOpb
 {
 template <typename T>
 struct OpbParser
