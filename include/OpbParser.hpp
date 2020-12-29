@@ -16,7 +16,7 @@ struct OpbParser
             file.close();
             throw filename + " does not exist!";
         }
-        std::cout << "Parsing ...";
+        std::cout << "Parsing ..." << std::endl;
         // Create Problem builder
         papilo::ProblemBuilder<T> probBuilder;
         probBuilder.setProblemName(filename);
@@ -57,10 +57,20 @@ struct OpbParser
             // Handle bound
             else if (s == ">=") {
                 probBuilder.setRowRhsInf(row, true);
+                probBuilder.setRowLhsInf(row, false);
+                file >> s;
+                probBuilder.setRowLhs(row, (T)std::stoi(s));
+            }
+            // Note: Case not in normal opb files
+            else if (s == "<=") {
+                probBuilder.setRowRhsInf(row, false);
+                probBuilder.setRowLhsInf(row, true);
                 file >> s;
                 probBuilder.setRowLhs(row, (T)std::stoi(s));
             }
             else if (s == "=") {
+                probBuilder.setRowRhsInf(row, false);
+                probBuilder.setRowLhsInf(row, false);
                 file >> s;
                 probBuilder.setRowLhs(row, (T)std::stoi(s));
                 probBuilder.setRowRhs(row, (T)std::stoi(s));
