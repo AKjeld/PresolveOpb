@@ -14,5 +14,6 @@ _deps
 /papilo
 /test
 /testPre
+/testOpt
 .DS_Store
 .vscode/settings.json
