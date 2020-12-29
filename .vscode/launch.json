@@ -8,7 +8,7 @@
             "name": "(lldb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/RoundingSatWithPreprocessor",
+            "program": "${workspaceFolder}/build/PresolveOpb",
             "args": ["${workspaceFolder}/build/test.txt", "${workspaceFolder}/build/test2.txt"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

@@ -29,6 +29,20 @@ struct OpbWriter
         // Write opb header
         file << "* #variable= " << consmatrix.getNCols() << " #constraint= " << consmatrix.getNRows() << std::endl;
 
+        // Write obj function
+        const papilo::Objective<T> objective = prob.getObjective();
+        bool objSet = false;
+        for (int i = 0; i < objective.coefficients.size(); ++i) {
+            if (objective.coefficients[i] != 0) {
+                if (!objSet) {
+                    objSet = true;
+                    file << "min: ";
+                }
+                if (objective.coefficients[i] > 0) file << "+";
+                file << objective.coefficients[i] << " " << varnames[i] << " ";
+            }
+        }
+        if (objSet) file << ";" << std::endl;
         // Write constraints
         for ( int i = 0; i < consmatrix.getNRows(); ++i) {
             // If constraint is <= flip to >=

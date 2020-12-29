@@ -2,6 +2,7 @@
 #include <iterator>
 #include <string>
 #include <stdio.h>
+#include <ctype.h>
 #include <papilo/core/ProblemBuilder.hpp>
 
 
@@ -44,16 +45,49 @@ struct OpbParser
             probBuilder.setColIntegral(i, true);
         }
 
-        std::string s;
         std::string commentLineTemp;
-        std::map<std::string, int> varMap;
+        bool loadingObj = false;
         int coeff;
-        int row = 0;
         int newcol = 0;
+        
+        // Mapping vars to col index
+        std::map<std::string, int> varMap;
+        std::string s;
+
+        // Get objective function if one is present:
+        while (file >> s) {
+            if (s == "*" || s[0] == '*') std::getline(file, commentLineTemp);
+            // Load objective function
+            else if (s == "min:") loadingObj = true;
+            else if (s == ";") {
+                loadingObj = false;
+                break;
+            }
+            else if (loadingObj) {
+                if (s[0] == '-' || s[0] == '+' || isdigit(s[0])) coeff = std::stoi(s);
+                else {
+                    auto addr = varMap.find(s);
+                    if (addr == varMap.end()) {
+                        varMap[s] = newcol++;
+                        addr = varMap.find(s);
+                        probBuilder.setColName(addr->second, s);
+                    }
+                    int col = addr->second;
+                    probBuilder.setObj(col, (T)coeff);
+                }
+            }
+            // else {
+            //     file.close();
+            //     file.open(filename.c_str(), std::ifstream::in);
+            //     break;
+            // }
+        }
+
+        int row = 0;
 
         while (file >> s) {        
             // Handle coefficient case
-            if (s[0] == '+' || s[0] == '-') coeff = std::stoi(s);
+            if (s[0] == '+' || s[0] == '-' || isdigit(s[0])) coeff = std::stoi(s);
             // Handle bound
             else if (s == ">=") {
                 probBuilder.setRowRhsInf(row, true);
@@ -87,7 +121,8 @@ struct OpbParser
                 probBuilder.addEntry(row, col, (T)coeff);
             }
             else if (s == ";") ++row;
-            else if (s == "*") std::getline(file, commentLineTemp);
+            // If comment or objective function push iterator past line
+            else if (s == "*" || s[0] == '*' || s[0] == 'm') std::getline(file, commentLineTemp);
         }
 
         file.close();
