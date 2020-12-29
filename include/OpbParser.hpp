@@ -61,7 +61,6 @@ struct OpbParser
             else if (s == "min:") loadingObj = true;
             else if (s == ";") {
                 loadingObj = false;
-                break;
             }
             else if (loadingObj) {
                 if (s[0] == '-' || s[0] == '+' || isdigit(s[0])) coeff = std::stoi(s);
@@ -76,11 +75,12 @@ struct OpbParser
                     probBuilder.setObj(col, (T)coeff);
                 }
             }
-            // else {
-            //     file.close();
-            //     file.open(filename.c_str(), std::ifstream::in);
-            //     break;
-            // }
+            // TODO: check why this is necessary.
+            else {
+                file.close();
+                file.open(filename.c_str(), std::ifstream::in);
+                break;
+            }
         }
 
         int row = 0;
