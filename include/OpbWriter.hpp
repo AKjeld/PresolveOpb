@@ -43,6 +43,7 @@ struct OpbWriter
             }
         }
         if (objSet) file << ";" << std::endl;
+        
         // Write constraints
         for ( int i = 0; i < consmatrix.getNRows(); ++i) {
             // If constraint is <= flip to >=

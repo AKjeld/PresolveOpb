@@ -1,8 +1,6 @@
 #pragma once
-#include <iostream>
-#include <papilo/core/Problem.hpp>
-
-#include <papilo/core/ConstraintMatrix.hpp>
+#include "StdInclude.hpp"
+#include "PapiloInclude.hpp"
 
 namespace utils {
 

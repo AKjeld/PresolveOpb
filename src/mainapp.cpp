@@ -1,11 +1,8 @@
 #include "utils.hpp"
 #include "OpbWriter.hpp"
 #include "OpbParser.hpp"
-#include <iostream>
-#include <papilo/misc/MultiPrecision.hpp>
-#include <papilo/core/Problem.hpp>
-#include <papilo/core/ProblemBuilder.hpp>
-#include <papilo/core/Presolve.hpp>
+#include "StdInclude.hpp"
+#include "PapiloInclude.hpp"
 
 int main(int argc, char *argv[]){
    if (argc < 3) {
@@ -14,21 +11,21 @@ int main(int argc, char *argv[]){
    const auto filenamein = argv[1];
    const auto filenameout = argv[2];
    std::cout << "Filename in given: " << filenamein << " Filename out given: " << filenameout << std::endl;
-   papilo::ProblemBuilder<double> testBuilder;
+   papilo::ProblemBuilder<double> probBuilder;
 
-   testBuilder = PresolveOpb::OpbParser<double>::parseProbOpb(filenamein);
+   probBuilder = PresolveOpb::OpbParser<double>::parseProbOpb(filenamein);
 
-   auto testProblem = testBuilder.build();
+   auto prob = probBuilder.build();
 
    // PresolveOpb::OpbWriter<double>::writeProbOpb(testProblem, "test.txt");
 
    // utils::print_problem(testProblem);
 
-   papilo::Presolve<double> testPresolver;
-   testPresolver.addDefaultPresolvers();
+   papilo::Presolve<double> presolver;
+   presolver.addDefaultPresolvers();
    
    // Ensure no vars are changed to be non binary
-   papilo::ParameterSet paramset = testPresolver.getParameters();
+   papilo::ParameterSet paramset = presolver.getParameters();
    
    paramset.setParameter("substitution.binarieswithints", false);
    // paramset.setParameter("sparsify.enabled", false);
@@ -37,20 +34,20 @@ int main(int argc, char *argv[]){
    paramset.setParameter("parallelrows.enabled", false);
    // paramset.setParameter("sparsify.maxscale", 1.0);
 
-   papilo::PresolveResult<double> result = testPresolver.apply(testProblem);
+   papilo::PresolveResult<double> result = presolver.apply(prob);
 
    // Validation of problem format
-   auto varlbounds = testProblem.getLowerBounds();
+   auto varlbounds = prob.getLowerBounds();
    for(double b : varlbounds) {
       if ((int)b != 0) throw std::invalid_argument("NOT BOOL! lower bound: " + std::to_string(b));
    }
 
-   auto varubounds = testProblem.getUpperBounds();
+   auto varubounds = prob.getUpperBounds();
    for(double b : varubounds) {
       if ((int)b != 1) throw std::invalid_argument("NOT BOOL! upper bound: " + std::to_string(b));
    }
 
-   for(papilo::String name : testProblem.getVariableNames()) {
+   for(papilo::String name : prob.getVariableNames()) {
       if(name[0] != 'x') throw std::invalid_argument("Incorrect naming of var " + name);
    }
 
@@ -62,7 +59,7 @@ int main(int argc, char *argv[]){
    // }
 
    //Write problem to file out
-   PresolveOpb::OpbWriter<double>::writeProbOpb(testProblem, filenameout);
+   PresolveOpb::OpbWriter<double>::writeProbOpb(prob, filenameout);
 
    std::cout << "Status code of test problem: " << utils::as_integer(result.status) << std::endl;
    return 0;
