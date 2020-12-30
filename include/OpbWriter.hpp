@@ -1,5 +1,5 @@
-#include <fstream>
-#include <stdio.h>
+#include "StdInclude.hpp"
+#include "PapiloInclude.hpp"
 
 namespace PresolveOpb 
 {

@@ -1,9 +1,5 @@
-#include <fstream>
-#include <iterator>
-#include <string>
-#include <stdio.h>
-#include <ctype.h>
-#include <papilo/core/ProblemBuilder.hpp>
+#include "StdInclude.hpp"
+#include "PapiloInclude.hpp"
 
 
 namespace PresolveOpb
