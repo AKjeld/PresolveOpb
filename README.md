@@ -15,3 +15,5 @@ After compilation use binary as follows.
 ```
 ./PresolveOpb <file in> <file out>
 ```
+## Changing Presolver Settings
+The solver reads the settings from `parameters.opb.txt`. Settings can be changed there. Note that there are a few settings that might break `.opb` instances, these are marked in the parameters file.
