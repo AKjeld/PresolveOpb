@@ -1,0 +1,22 @@
+[
+{"name": "air01.0.s.opb", "status": "1", "presolveTime": 0.66},
+{"name": "air01.0.u.opb", "status": "1", "presolveTime": 0.47},
+{"name": "air02.0.s.opb", "status": "1", "presolveTime": 73.37},
+{"name": "air02.0.u.opb", "status": "1", "presolveTime": 75.16},
+{"name": "bm23.0.s.opb", "status": "0", "presolveTime": 0.01},
+{"name": "bm23.0.u.opb", "status": "0", "presolveTime": 0.01},
+{"name": "diamond.0.d.opb", "status": "4", "presolveTime": 0.0},
+{"name": "p0040.0.s.opb", "status": "1", "presolveTime": 0.01},
+{"name": "p0040.0.u.opb", "status": "1", "presolveTime": 0.01},
+{"name": "p0291.0.s.opb", "status": "1", "presolveTime": 0.03},
+{"name": "p0291.0.u.opb", "status": "1", "presolveTime": 0.03},
+{"name": "pipex.0.s.opb", "status": "1", "presolveTime": 0.01},
+{"name": "pipex.0.u.opb", "status": "1", "presolveTime": 0.01},
+{"name": "sentoy.0.s.opb", "status": "0", "presolveTime": 0.02},
+{"name": "sentoy.0.u.opb", "status": "0", "presolveTime": 0.02},
+{"name": "stein15.0.s.opb", "status": "1", "presolveTime": 0.01},
+{"name": "stein15.0.u.opb", "status": "1", "presolveTime": 0.0},
+{"name": "stein9.0.s.opb", "status": "1", "presolveTime": 0.0},
+{"name": "stein9.0.u.opb", "status": "1", "presolveTime": 0.0},
+
+]
