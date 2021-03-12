@@ -2,17 +2,38 @@
 #include "OpbWriter.hpp"
 #include "OpbParser.hpp"
 #include "ParamParser.hpp"
+#include "PostsolveWriter.hpp"
 #include "StdInclude.hpp"
 #include "PapiloInclude.hpp"
+#include "BoostInclude.hpp"
+#include "ArgParser.hpp"
+
+namespace po = boost::program_options;
 
 int main(int argc, char *argv[]){
-   std::cout << argc << std::endl;
-   
-   if (argc < 3) {
-      throw std::invalid_argument("Usage: ./PresolveOpb <filename_in> <filename_out>");
+   po::variables_map optsvm = PresolveOpb::ArgParser::parseArgs(argc, argv);
+
+   if(optsvm.count("filein")) {
+      std::cout << "hello there" << optsvm["filein"].as<std::string>() << std::endl;
    }
-   const auto filenamein = argv[1];
-   const auto filenameout = argv[2];
+
+   if(optsvm.count("help") || !optsvm.count("filein")) {
+      return 1;
+   }
+
+   const std::string filenamein = optsvm["filein"].as<std::string>();
+   std::string filenameout = filenamein.substr(0, filenamein.find_last_of('.'))+".pre.opb";
+   if (optsvm.count("fileout")) {
+      filenameout = optsvm["fileout"].as<std::string>();
+   }
+   const std::string filenamepost = filenameout.substr(0, filenameout.find_last_of('.')) + ".postsolve";
+
+   // if (argc < 3) {
+   //    throw std::invalid_argument("Usage: ./PresolveOpb <filename_in> <filename_out>");
+   // }
+   // const auto filenamein = argv[1];
+   // const auto filenameout = argv[2];
+
    std::cout << "Filename in given: " << filenamein << " Filename out given: " << filenameout << std::endl;
    papilo::ProblemBuilder<double> probBuilder;
 
@@ -35,6 +56,7 @@ int main(int argc, char *argv[]){
    }
 
    papilo::PresolveResult<double> result = presolver.apply(prob);
+
 
    if (utils::as_integer(result.status) <= 2) {
       // Validation of problem format
@@ -59,7 +81,11 @@ int main(int argc, char *argv[]){
       //    }
       // }
 
+      //Write postsolve to file
+      // result.postsolve.serialize()
+
       //Write problem to file out
+      PresolveOpb::PostsolveWriter<double>::writePostsolve(result, filenamepost);
       PresolveOpb::OpbWriter<double>::writeProbOpb(prob, filenameout);
    }
 
