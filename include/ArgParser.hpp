@@ -13,6 +13,9 @@ struct ArgParser
             ("help", "Display all options")
             ("filein,I", po::value< std::string>(), "Path to file in (.opb)")
             ("fileout,O", po::value< std::string>(), "Path to file out (default <file-name>.pre.opb")
+            ("param", po::value< std::string>(), "Path to parameter file (default parameters.txt) NYI")
+            ("postsolve", "Postsolve solution. Supply .postsolve file and solution")
+            ("postfile,P", po::value< std::string>(), "Path to postsolve file (default <file-name>.pre.postsolve")
         ;
 
         po::variables_map vm;

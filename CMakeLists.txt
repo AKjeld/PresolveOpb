@@ -17,7 +17,7 @@ SET (BOOST_INCLUDEDIR "/usr/local/Cellar/boost/include/1.75.0_2")
 SET (BOOST_LIBRARYDIR "/usr/local/Cellar/boost/lib/1.75.0_2")
 
 set (Boost_NO_BOOST_CMAKE ON)
-find_package(Boost ${BOOST_MIN_VERSION} REQUIRED serialization program_options)
+find_package(Boost ${BOOST_MIN_VERSION} REQUIRED serialization program_options iostreams)
 if (NOT Boost_FOUND)
   message(FATAL_ERROR "Fatal error: Boost (version >= 1.55) required.")
 else()
@@ -59,5 +59,5 @@ file(GLOB SOURCES "src/*.cpp")
 
 
 add_executable(PresolveOpb ${SOURCES})
-target_link_libraries(PresolveOpb ${PAPILO_IMPORTED_TARGETS} ${Boost_LIBRARIES} Boost::serialization Boost::program_options)
+target_link_libraries(PresolveOpb ${PAPILO_IMPORTED_TARGETS} ${Boost_LIBRARIES} Boost::serialization Boost::program_options Boost::iostreams)
 # target_link_libraries(PresolveOpb PRIVATE Boost::serialization)

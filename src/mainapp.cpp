@@ -2,6 +2,8 @@
 #include "OpbWriter.hpp"
 #include "OpbParser.hpp"
 #include "ParamParser.hpp"
+#include "PostsolveOpb.hpp"
+#include "RoundingSatSolutionParser.hpp"
 #include "PostsolveWriter.hpp"
 #include "StdInclude.hpp"
 #include "PapiloInclude.hpp"
@@ -11,28 +13,40 @@
 namespace po = boost::program_options;
 
 int main(int argc, char *argv[]){
+   // Parse command line
    po::variables_map optsvm = PresolveOpb::ArgParser::parseArgs(argc, argv);
-
-   if(optsvm.count("filein")) {
-      std::cout << "hello there" << optsvm["filein"].as<std::string>() << std::endl;
-   }
 
    if(optsvm.count("help") || !optsvm.count("filein")) {
       return 1;
    }
-
    const std::string filenamein = optsvm["filein"].as<std::string>();
+
+   if(optsvm.count("postsolve")) {
+      //postsolve
+
+      // Find postsolve path
+      std::string postsolvePath;
+      if(optsvm.count("postfile")) postsolvePath = optsvm["postfile"].as<std::string>();
+      else postsolvePath = filenamein.substr(0, filenamein.find_last_of('.')) + ".pre.postsolve";
+
+      std::cout << "Looking for postsolve file at: " << postsolvePath << std::endl;
+      std::cout << "Looking for solution file at:  " << filenamein << std::endl;
+
+      // Parse solution (specific roundingsat format)
+      papilo::Solution<double> reducedSol = RoundingSatParser::SolutionParser<double>::parseSol(filenamein);
+
+      // Execute postsolve
+      PresolveOpb::PostsolveOpb<double>::postSolve(postsolvePath, reducedSol);
+
+      return 0;
+   }
+
+
    std::string filenameout = filenamein.substr(0, filenamein.find_last_of('.'))+".pre.opb";
    if (optsvm.count("fileout")) {
       filenameout = optsvm["fileout"].as<std::string>();
    }
    const std::string filenamepost = filenameout.substr(0, filenameout.find_last_of('.')) + ".postsolve";
-
-   // if (argc < 3) {
-   //    throw std::invalid_argument("Usage: ./PresolveOpb <filename_in> <filename_out>");
-   // }
-   // const auto filenamein = argv[1];
-   // const auto filenameout = argv[2];
 
    std::cout << "Filename in given: " << filenamein << " Filename out given: " << filenameout << std::endl;
    papilo::ProblemBuilder<double> probBuilder;
@@ -81,11 +95,10 @@ int main(int argc, char *argv[]){
       //    }
       // }
 
-      //Write postsolve to file
-      // result.postsolve.serialize()
-
       //Write problem to file out
       PresolveOpb::PostsolveWriter<double>::writePostsolve(result, filenamepost);
+
+      //Write postsolve instance
       PresolveOpb::OpbWriter<double>::writeProbOpb(prob, filenameout);
    }
 
