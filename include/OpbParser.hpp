@@ -39,6 +39,7 @@ struct OpbParser
             probBuilder.setColUb(i, 1);
             probBuilder.setColLb(i, 0);
             probBuilder.setColIntegral(i, true);
+            probBuilder.setColName(i, "x" + std::to_string(i+1));
         }
 
         std::string commentLineTemp;

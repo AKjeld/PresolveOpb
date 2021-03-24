@@ -27,7 +27,7 @@ int main(int argc, char *argv[]){
       // Find postsolve path
       std::string postsolvePath;
       if(optsvm.count("postfile")) postsolvePath = optsvm["postfile"].as<std::string>();
-      else postsolvePath = filenamein.substr(0, filenamein.find_last_of('.')) + ".pre.postsolve";
+      else postsolvePath = filenamein.substr(0, filenamein.find_last_of('.')) + ".postsolve";
 
       std::cout << "Looking for postsolve file at: " << postsolvePath << std::endl;
       std::cout << "Looking for solution file at:  " << filenamein << std::endl;
@@ -36,7 +36,7 @@ int main(int argc, char *argv[]){
       papilo::Solution<double> reducedSol = RoundingSatParser::SolutionParser<double>::parseSol(filenamein);
 
       // Execute postsolve
-      PresolveOpb::PostsolveOpb<double>::postSolve(postsolvePath, reducedSol);
+      PresolveOpb::PostsolveOpb<double>::postSolve(postsolvePath, reducedSol, filenamein);
 
       return 0;
    }
