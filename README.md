@@ -11,12 +11,7 @@ cmake ..
 make
 ```
 ## Binary usage
-### Presolving
-Presolve an instance by
-```
-./PresolveOpb -I <file-in>
-```
-All options
+### All Options
 ```
 All options:
   --help                Display all options
@@ -26,6 +21,11 @@ All options:
   -P [ --postfile ] arg Path to postsolve file (default 
                         <file-name>.pre.postsolve
 ```
+### Presolving
+Presolve an instance by
+```
+./PresolveOpb -I <file-in>
+```
 ### Postsolving
 Supply your solution along with the postsolve file.
 ```
@@ -34,7 +34,7 @@ Supply your solution along with the postsolve file.
 ## Solution format
 Currently only supports RoundingSat solution format. If you use RoundingSat pipe the solution to a file and supply that file.
 ## Example workflow with RoundingSat
-1. run `./PresolveOpb -I example.opb -O example.pre.opb
+1. run `./PresolveOpb -I example.opb -O example.pre.opb`
 2. run `./roundingsat example.pre.opb --print-sol=1 > example.pre.sol`
 3. run `./PresolveOpb -I example.pre.sol -P example.pre.postsolve --postsolve`
 ## Changing Presolver Settings
